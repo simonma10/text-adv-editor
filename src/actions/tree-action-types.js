@@ -1,0 +1,1 @@
+export const REQUEST_JSON = "REQUEST_JSON";

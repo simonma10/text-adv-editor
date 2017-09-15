@@ -1,0 +1,22 @@
+import _ from 'lodash';
+
+import * as types from '../actions/app-state-action-types';
+
+const initialState = {
+    status: "loading"
+};
+
+export default function appStateReducer(state = initialState, action){
+
+    switch (action.type){
+        case types.SET_STATUS:
+            return Object.assign({}, state, {
+                status: action.payload,
+            });
+            break;
+
+        default:
+            return state;
+
+    }
+}
