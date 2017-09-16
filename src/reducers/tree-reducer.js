@@ -11,7 +11,7 @@ export default function treeReducer(state = initialState, action){
     switch (action.type){
         case types.REQUEST_JSON:
             return Object.assign({}, state, {
-                tree: loadData(action.url)
+                tree: JSON.parse(loadData(action.url))
             });
             break;
 
@@ -26,6 +26,7 @@ function loadData(url){
         console.log(response.json);
         return response.json();
     }).catch(error => {
+        console.log(error);
         return error;
     });
 }

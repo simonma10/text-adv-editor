@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { setStatus } from '../actions/app-state-actions';
+import { setStatus, getStatus} from '../actions/app-state-actions';
 
 
 /**
@@ -13,16 +13,24 @@ class App extends Component{
     constructor(props){
         super(props);
         this.state = {};
+        this.handleClick = this.handleClick.bind(this);
     }
 
     componentDidMount(){
         this.props.setAppStatus("ready");
     }
 
+    handleClick(e){
+        e.preventDefault();
+        console.log('clicked button');
+        this.props.setAppStatus("clicked");
+    }
+
     render(){
         return(
             <div>
-                Hello world. App Status is {this.props.appStatus}
+                <p>Hello world. App Status is {this.props.appStatus}</p>
+                <button onClick={this.handleClick}>Click me!</button>
             </div>
         );
     }
@@ -40,6 +48,7 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
     return bindActionCreators({
         setAppStatus: setStatus,
+        getAppStatus: getStatus
     }, dispatch)
 
 }

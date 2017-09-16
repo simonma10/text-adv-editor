@@ -15,6 +15,10 @@ export default function appStateReducer(state = initialState, action){
             });
             break;
 
+        case types.GET_STATUS:
+            return _.clone(state).status;
+            break;
+
         default:
             return state;
 

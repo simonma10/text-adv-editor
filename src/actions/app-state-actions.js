@@ -6,3 +6,9 @@ export function setStatus (status) {
         payload: status
     }
 }
+
+export function getStatus () {
+    return {
+        type: types.GET_STATUS
+    }
+}
