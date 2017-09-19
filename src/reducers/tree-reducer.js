@@ -5,7 +5,14 @@ import * as types from '../actions/tree-action-types';
 //const initialState = {};
 
 const initialState = {
-    payload: {},
+    config: {},
+    messages:[],
+    verbs:[],
+    nouns:[],
+    locations:[],
+    items:[],
+    conditions:[],
+    status:'init'
 
 }
 
@@ -19,17 +26,28 @@ export default function treeReducer(state = initialState, action){
             break;
 
         case types.RECEIVE_DATA:
+            let data = action.results;
             console.log('reducer: receive');
-            console.log(action.results);
+
 
             return Object.assign({}, state, {
-                payload: action.results
+                config: data.config,
+                messages: data.messages,
+                verbs: data.verbs,
+                nouns: data.nouns,
+                locations: data.locations,
+                items: data.items,
+                conditions: data.conditions,
+                status: "loaded"
+
             });
             break;
 
         case types.REQUEST_DATA:
             console.log('reducer: request');
-            return state;
+            return Object.assign({}, state, {
+                status: 'loading'
+            });
             break;
 
 
