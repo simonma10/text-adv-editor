@@ -20,6 +20,7 @@ export default function appStateReducer(state = initialState, action){
             break;
 
         default:
+            console.log('appStateReducer default', action)
             return state;
 
     }

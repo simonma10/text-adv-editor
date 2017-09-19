@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import SortableTree from 'react-sortable-tree';
-import {requestJson} from "../actions/tree-actions";
+import {requestJson, requestData} from "../actions/tree-actions";
 
 class Tree extends Component {
     constructor(props) {
@@ -17,7 +17,10 @@ class Tree extends Component {
     }
 
     componentDidMount(){
-        requestJson('data/globals.json');
+       /* let res = requestJson('data/globals.json');
+        console.log('res', res);*/
+       let res = requestData('data/globals.json');
+       console.log('res', res);
     }
 
     render() {
@@ -44,6 +47,7 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
     return bindActionCreators({
         requestJson: requestJson,
+        requestData: requestData
     }, dispatch)
 }
 

@@ -44,7 +44,7 @@ describe('sagas', () => {
     });*/
 
     it('should set status text with setAppStatus', () => {
-        setup();
+        //setup();
         const gen = setAppStatus("saga was here");
         expect (gen.next().value).toEqual(put ({type: types.SET_STATUS, value: "saga was here"}));
 

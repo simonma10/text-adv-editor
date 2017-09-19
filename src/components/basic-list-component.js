@@ -2,18 +2,16 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { setStatus, getStatus} from '../actions/app-state-actions';
-import ConfigListComponent from './config-list-component';
+import { getList, setList } from '../actions/tree-actions';
 
 
-/**
- * App container object.
- */
-
-class App extends Component{
+class BasicList extends Component{
     constructor(props){
         super(props);
-        this.state = {};
+        this.state = {
+            listName: '',
+            list: []
+        };
         this.handleClick = this.handleClick.bind(this);
     }
 
@@ -31,10 +29,10 @@ class App extends Component{
         return(
             <div>
                 <p>TA Editor. App Status is {this.props.appStatus}
-                <button onClick={this.handleClick}>Click me!</button>
+                    <button onClick={this.handleClick}>Click me!</button>
                 </p>
                 <hr/>
-                <ConfigListComponent/>
+
             </div>
         );
     }
@@ -51,8 +49,8 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
     return bindActionCreators({
-        setAppStatus: setStatus,
-        getAppStatus: getStatus
+        setList: setList,
+        getList: getList
     }, dispatch)
 
 }

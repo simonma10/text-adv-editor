@@ -1,40 +1,45 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import _ from 'lodash';
 
-import { setStatus, getStatus} from '../actions/app-state-actions';
-import ConfigListComponent from './config-list-component';
+import { getConfig, setConfig } from '../actions/tree-actions';
 
 
-/**
- * App container object.
- */
-
-class App extends Component{
+class ConfigListComponent extends Component{
     constructor(props){
         super(props);
-        this.state = {};
+        this.state = {
+            [
+                'key':'value',
+                'blah': 'blah-de-blah'
+            ]
+        };
         this.handleClick = this.handleClick.bind(this);
     }
 
     componentDidMount(){
-        this.props.setAppStatus("ready");
+
     }
 
     handleClick(e){
         e.preventDefault();
         console.log('clicked button');
-        this.props.setAppStatus("clicked");
+    }
+
+    renderItem(item){
+        return (
+            <p>{item.key}: {item.value}</p>
+            );
     }
 
     render(){
         return(
             <div>
-                <p>TA Editor. App Status is {this.props.appStatus}
+                {_.forEach(this.state.config, () => {this.renderItem})}
+
                 <button onClick={this.handleClick}>Click me!</button>
-                </p>
-                <hr/>
-                <ConfigListComponent/>
+
             </div>
         );
     }
@@ -45,16 +50,16 @@ function mapStateToProps(state){
     //  - component will auto re-render
     //  - the object in the state function will be assigned as props to the component
     return {
-        appStatus: state.appState.status
+        config: state.config
     }
 }
 
 function mapDispatchToProps(dispatch){
     return bindActionCreators({
-        setAppStatus: setStatus,
-        getAppStatus: getStatus
+        setConfig: setConfig,
+        getConfig: getConfig
     }, dispatch)
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(ConfigListComponent);
