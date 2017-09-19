@@ -7,3 +7,18 @@ export function requestJson (url) {
         payload: url
     }
 }
+
+export function requestData () {
+    console.log('request data');
+    return {
+        type: types.REQUEST_DATA
+    }
+}
+
+export function receiveData (payload) {
+    console.log('receive data');
+    return {
+        type: types.RECEIVE_DATA,
+        payload: payload
+    }
+}

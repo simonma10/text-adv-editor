@@ -3,7 +3,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import SortableTree from 'react-sortable-tree';
-import {requestJson} from "../actions/tree-actions";
+import {requestData, receiveData} from "../actions/tree-actions";
+import { genericFetch } from "../utils/file-loader"
+import {RECEIVE_DATA} from "../actions/tree-action-types";
 
 class Tree extends Component {
     constructor(props) {
@@ -11,6 +13,8 @@ class Tree extends Component {
 
         this.state = {
             //treeData: [{ title: 'Chicken', children: [ { title: 'Egg' } ] }],
+            payload: [],
+            testConfig: 'Loading...',
             treeData: [{ title: 'Config', children: [{}]}]
             /*treeData:[ {
                 "config":{
@@ -292,18 +296,45 @@ class Tree extends Component {
 */
         };
     }
+    componentWillMount(){
+        console.log('componentWilLMount');
+        this.props.genericFetch({
+            method: 'GET',
+            dataUrl: '/data/globals.json',
+            dataAcquiredType: RECEIVE_DATA,
+            successCallBack: this.getSuccess,
+            failCallBack: this.getFail
+        });
+    }
 
     componentDidMount(){
-        requestJson('data/globals.json');
+        console.log('componentDidMount')
+    }
+
+    getSuccess() {
+        console.log('success');
+        //this.testConfig = this.props.payload.config['msgWelcome'];
+
+    }
+    getFail() {
+        console.log('File read failure');
+        alert('file load failure');
+    }
+
+    renderConfig(){
+        if(this.props.payload){
+            return(
+                <h1>{this.props.payload.config.toString()}</h1>
+            )
+        }
+
     }
 
     render() {
         return (
             <div style={{ height: 768 }}>
-                <SortableTree
-                    treeData={this.state.treeData}
-                    onChange={treeData => this.setState({ treeData })}
-                />
+                {this.props.testConfig}
+                {this.renderConfig()}
             </div>
         );
     }
@@ -314,14 +345,25 @@ function mapStateToProps(state){
     //  - component will auto re-render
     //  - the object in the state function will be assigned as props to the component
     return {
-        tree: state.tree
+        tree: state.tree,
+        payload: state.tree.payload,
+        config: state.tree.payload.config
     }
 }
 
 function mapDispatchToProps(dispatch){
     return bindActionCreators({
-        requestJson: requestJson,
+        requestData,
+        receiveData,
+        genericFetch
     }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Tree);
+
+/*
+ <SortableTree
+                    treeData={this.state.treeData}
+                    onChange={treeData => this.setState({ treeData })}
+                />
+ */
