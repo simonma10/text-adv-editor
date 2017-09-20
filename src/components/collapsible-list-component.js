@@ -8,19 +8,30 @@ import ListItemEditModal from './list-item-edit-modal';
 class CollapsibleList extends Component {
     constructor(props) {
         super(props);
-        this.handleRowClick = this.handleRowClick.bind(this);
-        this.renderList = this.renderList.bind(this);
+        //this.handleRowClick = this.handleRowClick.bind(this);
+        //this.renderList = this.renderList.bind(this);
         this.state = {
             list: _.has(props, 'list') ? props.list : {},
             listName: _.has(props, 'listName') ? props.listName : 'list',
-            collapse: false,
+            collapse: false
 
         }
+        this.modalInstance = (
+          <ListItemEditModal/>
+        );
 
     }
 
     handleRowClick = (key, value) => {
         console.log('clicked on row', key, value);
+        this.modalInstance.modal('show');
+        /*return(
+            <ListItemEditModal
+                listName={this.props.listName}
+
+            />
+        )
+*/
     }
 
 
@@ -36,9 +47,9 @@ class CollapsibleList extends Component {
                         {value}
                     </td>
                     <td width="10%">
-                        <button onClick={() => {
+                        <img src="/images/ic_create_black_24px.svg" onClick={() => {
                             this.handleRowClick(index, value);
-                        }}><img src="/images/ic_create_black_24px.svg"  /></button>
+                        }} />
 
                     </td>
                 </tr>
@@ -49,29 +60,9 @@ class CollapsibleList extends Component {
 
     }
 
-    itemList(){
-        const list = this.props.list;
-        //const listItems = _.map(list)
-        const listItems = _.map((item, index) =>
-            <tr key={index}>
-                <td >{item.key}</td>
-                <td>{item.value}</td>
-                <td><img src="images/ic_create_black_24px.svg"/></td>
-            </tr>
-        )
-
-        return listItems;
-    }
-
-    render() {
+       render() {
         let href = '#' + this.props.listName;
-        /*const listItems = this.props.list.map((item) =>
-            <tr key={item}>
-                <td >{item.key}</td>
-                <td>{item.value}</td>
-                <td><img src="images/ic_create_black_24px.svg"/></td>
-            </tr>
-        );*/
+
         return (
             <div>
 
@@ -94,6 +85,7 @@ class CollapsibleList extends Component {
 
                     </tbody>
                 </table>
+
 
 
             </div>
@@ -134,9 +126,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(CollapsibleList);
 
                     })}
 
-<ListItemEditModal
-                    listName={this.props.listName}
-                />
+
 
                 onClick={() => this.handleRowClick
  */

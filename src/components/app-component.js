@@ -9,6 +9,7 @@ import { genericFetch } from "../utils/file-loader"
 import {RECEIVE_DATA} from "../actions/tree-action-types";
 
 import CollapsibleList from './collapsible-list-component';
+import ListItemEditModal from './list-item-edit-modal';
 
 /**
  * App container object.
@@ -53,6 +54,12 @@ class App extends Component{
         return(
             <div>
                 <p>Hello world. App Status: {this.props.appStatus}.  File Status: {this.props.treeStatus}</p>
+                <ListItemEditModal
+                    keyName="key"
+                    value="value"
+                    listName="random list"
+                    mode="Edit"
+                />
                 <CollapsibleList
                     listName="Config"
                     list={this.props.config}
