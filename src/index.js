@@ -5,7 +5,6 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 
 import App from './components/app-component';
-import Tree from './components/sortable-tree-component';
 import rootReducer from './reducers/all-reducers';
 
 
@@ -30,7 +29,6 @@ ReactDOM.render(
     <Provider store={store}>
         <div>
             <App/>
-            <Tree/>
         </div>
     </Provider>
     , document.querySelector('.container')
