@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-//import { bindActionCreators } from 'redux';
-//import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 //import _ from 'lodash';
+import { activateModal } from "../actions/modal-actions"
 
-export default class ListItemEditModal extends Component {
+class ListItemEditModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -11,13 +12,16 @@ export default class ListItemEditModal extends Component {
             value: _.has(props, 'value') ? props.value : '',
             listName: _.has(props, 'value') ? props.value : '',
             mode: _.has(props, 'mode') ? props.mode : '',
+            modalReducer: {},
+
         }
     }
-
-    show(){
-
+    canvasOnClick = () => {
+        const { modalReducer } = this.props;
+        if (modalReducer.canvasOnClick) {
+            this.props.activateModal(false);
+        }
     }
-
 
 
     render() {
@@ -57,6 +61,22 @@ export default class ListItemEditModal extends Component {
         );
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        modalReducer: state.modalReducer
+    };
+}
+
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        activateModal
+    }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListItemEditModal);
+
 
 /*
 function mapStateToProps(state){

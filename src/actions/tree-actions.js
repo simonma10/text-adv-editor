@@ -22,3 +22,4 @@ export function receiveData (payload) {
         payload: payload
     }
 }
+

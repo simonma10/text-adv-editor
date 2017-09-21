@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
+import { constructModal, activateModal } from '../actions/modal-actions';
 import ListItemEditModal from './list-item-edit-modal';
 
 class CollapsibleList extends Component {
@@ -16,15 +17,23 @@ class CollapsibleList extends Component {
             collapse: false
 
         }
-        this.modalInstance = (
-          <ListItemEditModal/>
-        );
 
+    }
+
+    componentWillMount() {
+        this.props.constructModal({
+            activate: false,
+            content: (
+                <div>Test</div>
+            ),
+            customStyle: null,
+            canvasOnClick: false
+        });
     }
 
     handleRowClick = (key, value) => {
         console.log('clicked on row', key, value);
-        this.modalInstance.modal('show');
+        this.props.activateModal(true);
         /*return(
             <ListItemEditModal
                 listName={this.props.listName}
@@ -85,7 +94,7 @@ class CollapsibleList extends Component {
 
                     </tbody>
                 </table>
-
+                <ListItemEditModal/>
 
 
             </div>
@@ -105,7 +114,8 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
     return bindActionCreators({
-
+        activateModal,
+        constructModal
     }, dispatch)
 }
 

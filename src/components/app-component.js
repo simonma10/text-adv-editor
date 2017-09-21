@@ -10,6 +10,7 @@ import {RECEIVE_DATA} from "../actions/tree-action-types";
 
 import CollapsibleList from './collapsible-list-component';
 import ListItemEditModal from './list-item-edit-modal';
+import RBSModal from './react-bootstrap-modal';
 
 /**
  * App container object.
@@ -54,28 +55,8 @@ class App extends Component{
         return(
             <div>
                 <p>Hello world. App Status: {this.props.appStatus}.  File Status: {this.props.treeStatus}</p>
-                <ListItemEditModal
-                    keyName="key"
-                    value="value"
-                    listName="random list"
-                    mode="Edit"
-                />
-                <CollapsibleList
-                    listName="Config"
-                    list={this.props.config}
-                />
-                <CollapsibleList
-                    listName="Messages"
-                    list={this.props.messages}
-                />
-                <CollapsibleList
-                    listName="Nouns"
-                    list={this.props.nouns}
-                />
-                <CollapsibleList
-                    listName="Verbs"
-                    list={this.props.verbs}
-                />
+                <RBSModal/>
+
             </div>
         );
     }
@@ -108,3 +89,29 @@ function mapDispatchToProps(dispatch){
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
 
+/*
+
+<ListItemEditModal
+                    keyName="key"
+                    value="value"
+                    listName="random list"
+                    mode="Edit"
+                />
+                <CollapsibleList
+                    listName="Config"
+                    list={this.props.config}
+                />
+                <CollapsibleList
+                    listName="Messages"
+                    list={this.props.messages}
+                />
+                <CollapsibleList
+                    listName="Nouns"
+                    list={this.props.nouns}
+                />
+                <CollapsibleList
+                    listName="Verbs"
+                    list={this.props.verbs}
+                />
+
+ */
