@@ -5,7 +5,8 @@ export default function (state = {
 	activate: false,
 	content: null,
 	customStyle: null,
-	canvasOnClick: true
+	canvasOnClick: true,
+	showModal: false
 }, action) {
   switch (action.type) {
     case MODAL_CONSTRUCTED: {
@@ -21,6 +22,7 @@ export default function (state = {
 		case MODAL_ACTIVATED: {
 			const cloned = _.clone(state);
 			cloned.activate = action.bool;
+			cloned.showModal = action.bool;
 
 			return cloned;
 		}

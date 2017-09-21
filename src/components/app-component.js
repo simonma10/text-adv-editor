@@ -5,12 +5,14 @@ import _ from 'lodash';
 
 import { setStatus } from '../actions/app-state-actions';
 import {requestData, receiveData} from "../actions/tree-actions";
-import { genericFetch } from "../utils/file-loader"
+import { genericFetch } from "../utils/file-loader";
+import { activateModal } from '../actions/modal-actions';
 import {RECEIVE_DATA} from "../actions/tree-action-types";
 
 import CollapsibleList from './collapsible-list-component';
 import ListItemEditModal from './list-item-edit-modal';
-import RBSModal from './react-bootstrap-modal';
+
+import { Nav, NavItem, NavDropdown, MenuItem, PageHeader } from 'react-bootstrap';
 
 /**
  * App container object.
@@ -34,14 +36,15 @@ class App extends Component{
     }
 
     componentDidMount(){
-        console.log('componentDidMount')
+        console.log('componentDidMount');
+        this.props.activateModal(true);
+
     }
 
     getSuccess() {
         console.log('success');
-
-
     }
+
     getFail() {
         console.log('File read failure');
         alert('file load failure');
@@ -49,14 +52,28 @@ class App extends Component{
 
     componentDidMount(){
         this.props.setStatus("ready");
+
     }
 
     render(){
+        const pageHeader = (
+            <PageHeader>Text Adventure Editor <small>app:{this.props.appStatus} / file:{this.props.treeStatus}</small></PageHeader>
+        );
+
+        let listItemEditModal = (
+            <ListItemEditModal
+                keyName="key"
+                value="value"
+                listName="test list"
+                mode="Edit"
+            />
+        );
+
         return(
             <div>
-                <p>Hello world. App Status: {this.props.appStatus}.  File Status: {this.props.treeStatus}</p>
-                <RBSModal/>
-
+                <p></p>
+                {pageHeader}
+                {listItemEditModal}
             </div>
         );
     }
@@ -82,7 +99,8 @@ function mapDispatchToProps(dispatch){
         setStatus,
         requestData,
         receiveData,
-        genericFetch
+        genericFetch,
+        activateModal
     }, dispatch)
 
 }
@@ -91,12 +109,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(App);
 
 /*
 
-<ListItemEditModal
-                    keyName="key"
-                    value="value"
-                    listName="random list"
-                    mode="Edit"
-                />
+
                 <CollapsibleList
                     listName="Config"
                     list={this.props.config}
@@ -113,5 +126,31 @@ export default connect(mapStateToProps, mapDispatchToProps)(App);
                     listName="Verbs"
                     list={this.props.verbs}
                 />
+
+ const NavDropdownExample = React.createClass({
+ handleSelect(eventKey) {
+ event.preventDefault();
+ alert(`selected ${eventKey}`);
+ },
+
+ render() {
+ return (
+ <Nav bsStyle="tabs" activeKey="1" onSelect={this.handleSelect}>
+ <NavItem eventKey="1" href="/home">NavItem 1 content</NavItem>
+ <NavItem eventKey="2" title="Item">NavItem 2 content</NavItem>
+ <NavItem eventKey="3" disabled>NavItem 3 content</NavItem>
+ <NavDropdown eventKey="4" title="Dropdown" id="nav-dropdown">
+ <MenuItem eventKey="4.1">Action</MenuItem>
+ <MenuItem eventKey="4.2">Another action</MenuItem>
+ <MenuItem eventKey="4.3">Something else here</MenuItem>
+ <MenuItem divider />
+ <MenuItem eventKey="4.4">Separated link</MenuItem>
+ </NavDropdown>
+ </Nav>
+ );
+ }
+ });
+
+
 
  */
