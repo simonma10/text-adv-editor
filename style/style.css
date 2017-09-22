@@ -12,3 +12,7 @@ th, td {
 span {
     padding-left: 10px;
 }
+
+.right-align {
+    text-align: right;
+}

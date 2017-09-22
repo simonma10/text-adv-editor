@@ -1,21 +1,15 @@
-export const MODAL_CONSTRUCTED = 'MODAL_CONSTRUCTED';
-export const MODAL_ACTIVATED = 'MODAL_ACTIVATED';
+export const MODAL_CONSTRUCT = 'MODAL_CONSTRUCT';
+export const MODAL_TOGGLE = 'MODAL_TOGGLE';
 
-export function constructModal({ activate, customStyle, content, canvasOnClick }) {
+export function constructModal(modalConfig) {
   return {
-    type: MODAL_CONSTRUCTED,
-    payload: {
-			activate,
-			customStyle,
-			content,
-			canvasOnClick
-		}
+    type: MODAL_CONSTRUCT,
+    payload: modalConfig
   };
 }
 
-export function activateModal(bool) {
+export function toggleModal() {
   return {
-    type: MODAL_ACTIVATED,
-    bool
+    type: MODAL_TOGGLE
   };
 }

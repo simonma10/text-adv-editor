@@ -6,12 +6,9 @@ import _ from 'lodash';
 import { setStatus } from '../actions/app-state-actions';
 import {requestData, receiveData} from "../actions/tree-actions";
 import { genericFetch } from "../utils/file-loader";
-import { activateModal } from '../actions/modal-actions';
 import {RECEIVE_DATA} from "../actions/tree-action-types";
 
-import CollapsibleList from './collapsible-list-component';
-import ListItemEditModal from './list-item-edit-modal';
-
+import CollapsiblePanel from './collapsible-panel-component';
 import { Nav, NavItem, NavDropdown, MenuItem, PageHeader } from 'react-bootstrap';
 
 /**
@@ -21,7 +18,7 @@ import { Nav, NavItem, NavDropdown, MenuItem, PageHeader } from 'react-bootstrap
 class App extends Component{
     constructor(props){
         super(props);
-        this.state = {};
+
     }
 
     componentWillMount(){
@@ -57,23 +54,22 @@ class App extends Component{
 
     render(){
         const pageHeader = (
-            <PageHeader>Text Adventure Editor <small>app:{this.props.appStatus} / file:{this.props.treeStatus}</small></PageHeader>
-        );
-
-        let listItemEditModal = (
-            <ListItemEditModal
-                keyName="key"
-                value="value"
-                listName="test list"
-                mode="Edit"
-            />
+            <PageHeader>JSON Editor <small>app:{this.props.appStatus} / file:{this.props.treeStatus}</small></PageHeader>
         );
 
         return(
             <div>
                 <p></p>
                 {pageHeader}
-                {listItemEditModal}
+
+                <CollapsiblePanel
+                    list={this.props.config}
+                    listName="Config"
+                />
+                <CollapsiblePanel
+                    list={this.props.messages}
+                    listName="Messages"
+                />
             </div>
         );
     }
@@ -100,7 +96,6 @@ function mapDispatchToProps(dispatch){
         requestData,
         receiveData,
         genericFetch,
-        activateModal
     }, dispatch)
 
 }

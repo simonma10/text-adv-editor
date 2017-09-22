@@ -3,55 +3,88 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Button, Modal } from 'react-bootstrap';
 
-import { activateModal } from "../actions/modal-actions"
+import { constructModal, toggleModal } from '../actions/modal-actions';
+import { saveListItemDetails } from '../actions/tree-actions';
 
 class ListItemEditModal extends Component{
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
-            showModal: false,
-            keyName: _.has(props, 'keyName') ? props.keyName : '',
-            value: _.has(props, 'value') ? props.value : '',
-            listName: _.has(props, 'value') ? props.value : '',
-            mode: _.has(props, 'mode') ? props.mode : '',
+            keyNameInput:'',
+            valueNameInput: ''
         }
-        this.open = this.open.bind(this);
+
         this.close = this.close.bind(this);
+        this.save = this.save.bind(this);
+        this.handleKeyChange = this.handleKeyChange.bind(this);
+        this.handleValueChange = this.handleValueChange.bind(this);
+    }
+
+    handleKeyChange(e){
+        console.log(e)
+        this.setState({keyNameInput: e.target.value});
+    }
+
+    handleValueChange(e){
+        console.log(e);
+        this.setState({valueNameInput: e.target.value});
     }
 
     close() {
-        this.setState({ showModal: false });
+        //this.setState({ showModal: false });
+        //this.props.activateModal(false);
+        this.props.toggleModal();
     }
 
-    open() {
-        this.setState({ showModal: true });
+
+    save(){
+        //dispatch update action to tree reducer
+        // key, value of inputs, listName
+
+        let payload = {
+            listName: this.props.modal.listName,
+            oldIndex: this.props.modal.itemIndex,
+            newIndex: this.state.keyNameInput,
+            oldValue: this.props.modal.itemValue,
+            newValue: this.state.valueNameInput
+        };
+        console.log('save', payload);
+        this.props.saveListItemDetails(payload);
     }
 
     render() {
 
         return (
             <div>
-                <Button
-                    bsStyle="primary"
-                    onClick={this.open}
-                >
-                    Launch demo modal
-                </Button>
-                <Modal show={this.state.showModal} onHide={this.close}>
+
+                <Modal show={this.props.modal.showModal} onHide={this.close}>
                     <Modal.Header closeButton>
-                        <Modal.Title>{this.props.mode} {this.props.listName}</Modal.Title>
+                        <Modal.Title>{this.props.modal.mode} {this.props.modal.listName}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <div className="form-group">
                             <label htmlFor="keyNameInput">Key</label>
-                            <input type="text" className="form-control" id="keyNameInput" placeholder={this.props.keyName}/>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="keyNameInput"
+                                placeholder={this.props.modal.itemIndex}
+                                value={this.state.keyNameInput}
+                                onChange={this.handleKeyChange}
+                            />
                             <label htmlFor="valueInput">Value</label>
-                            <input type="text" className="form-control" id="valueInput" placeholder={this.props.value}/>
-
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="valueInput"
+                                placeholder={this.props.modal.itemValue}
+                                value={this.state.valueNameInput}
+                                onChange={this.handleValueChange}
+                            />
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button className="btn btn-primary">Save changes</Button>
+                        <Button onClick={this.save} className="btn btn-primary">Save changes</Button>
                         <Button onClick={this.close}>Close</Button>
                     </Modal.Footer>
                 </Modal>
@@ -63,14 +96,16 @@ class ListItemEditModal extends Component{
 
 function mapStateToProps(state) {
     return {
-        modalReducer: state.modalReducer
+        modal: state.modal
     };
 }
 
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        activateModal
+        constructModal,
+        toggleModal,
+        saveListItemDetails
     }, dispatch);
 }
 
@@ -88,5 +123,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(ListItemEditModal);
  Launch demo modal
  </Button>
 
-
+<Button
+                    bsStyle="primary"
+                    onClick={this.open}
+                >
+                    Launch demo modal
+                </Button>
  */

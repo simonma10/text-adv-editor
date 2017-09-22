@@ -23,3 +23,9 @@ export function receiveData (payload) {
     }
 }
 
+export function saveListItemDetails (payload) {
+    return {
+        type: types.SAVE_LIST_ITEM_DETAILS,
+        payload: payload
+    }
+}
