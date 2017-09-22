@@ -70,6 +70,14 @@ class App extends Component{
                     list={this.props.messages}
                     listName="Messages"
                 />
+                <CollapsiblePanel
+                    list={this.props.verbs}
+                    listName="Verbs"
+                />
+                <CollapsiblePanel
+                    list={this.props.nouns}
+                    listName="Nouns"
+                />
             </div>
         );
     }

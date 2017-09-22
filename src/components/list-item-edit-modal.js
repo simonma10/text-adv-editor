@@ -21,18 +21,16 @@ class ListItemEditModal extends Component{
     }
 
     handleKeyChange(e){
-        console.log(e)
+        //console.log(e)
         this.setState({keyNameInput: e.target.value});
     }
 
     handleValueChange(e){
-        console.log(e);
+        //console.log(e);
         this.setState({valueNameInput: e.target.value});
     }
 
     close() {
-        //this.setState({ showModal: false });
-        //this.props.activateModal(false);
         this.props.toggleModal();
     }
 
@@ -50,6 +48,10 @@ class ListItemEditModal extends Component{
         };
         console.log('save', payload);
         this.props.saveListItemDetails(payload);
+
+        this.state.valueNameInput = '';
+        this.state.keyNameInput = '';
+        this.close();
     }
 
     render() {
@@ -110,23 +112,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListItemEditModal);
-
-
-/*
-
- <p>Click to get the full Modal experience!</p>
-
- <Button
- bsStyle="primary"
- onClick={this.open}
- >
- Launch demo modal
- </Button>
-
-<Button
-                    bsStyle="primary"
-                    onClick={this.open}
-                >
-                    Launch demo modal
-                </Button>
- */

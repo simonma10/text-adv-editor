@@ -6,8 +6,10 @@ export default function (state = {
 	listName: '',
 	list: {},
 	itemIndex: '',
-	itemValue: ''
+	itemValue: '',
+	mode: 'Edit'
 }, action) {
+
   switch (action.type) {
     case MODAL_CONSTRUCT: {
     	const cloned = _.clone(state);

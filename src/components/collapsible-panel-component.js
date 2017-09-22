@@ -5,7 +5,8 @@ import { Panel, Table, Button, Glyphicon, ButtonGroup } from 'react-bootstrap';
 import _ from 'lodash';
 
 import ListItemEditModal from './list-item-edit-modal';
-import { constructModal, toggleModal } from "../actions/modal-actions"
+import { constructModal, toggleModal } from '../actions/modal-actions';
+import { deleteListItem, addListItem } from '../actions/tree-actions';
 
 class CollapsiblePanel extends Component{
     constructor(props) {
@@ -37,6 +38,15 @@ class CollapsiblePanel extends Component{
 
     delete(index){
         console.log('delete', index);
+        let payload = {
+            listName: this.props.listName,
+            itemKey: index
+        }
+        this.props.deleteListItem(payload);
+    }
+
+    add(){
+        console.log('add');
     }
 
     renderList(){
@@ -46,8 +56,8 @@ class CollapsiblePanel extends Component{
                     <td width="30%">{index}</td>
                     <td width="60%">{value}</td>
                     <td width="10%" className="right-align">
-                        <a href="#" onClick={() => this.edit(index, value)}><Glyphicon glyph="pencil"/></a>
-                        <a href="#" onClick={() => this.delete(index)}><Glyphicon glyph="trash"/></a>
+                        <a href="#" onClick={() => this.edit(index, value)}> <Glyphicon glyph="pencil"/> </a>
+                        <a href="#" onClick={() => this.delete(index)}> <Glyphicon glyph="trash"/> </a>
                     </td>
                 </tr>
             )
@@ -55,16 +65,24 @@ class CollapsiblePanel extends Component{
     }
 
     render() {
+        const footer = (
+            <span>
+                <a href="#" onClick={this.add}>New</a>
+            </span>
+
+        );
 
         return (
-            <Panel collapsible defaultExpanded header={this.props.listName}>
-                <Table fill>
-                    <tbody>
-                        {this.renderList()}
-                    </tbody>
-                </Table>
-                <ListItemEditModal />
-            </Panel>
+            <div>
+                <ListItemEditModal/>
+                <Panel collapsible header={this.props.listName} footer={footer}>
+                    <Table fill>
+                        <tbody>
+                            {this.renderList()}
+                        </tbody>
+                    </Table>
+                </Panel>
+            </div>
         );
     }
 }
@@ -81,7 +99,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         constructModal,
-        toggleModal
+        toggleModal,
+        deleteListItem,
+        addListItem
     }, dispatch);
 }
 

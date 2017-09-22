@@ -78,10 +78,23 @@ export default function treeReducer(state = initialState, action){
             return Object.assign({}, state, {
                 [data.listName]: clonedList
             });
-
-
             break;
 
+        case types.DELETE_LIST_ITEM:
+            console.log('tree reducer', action.payload);
+            data = action.payload;
+
+            //--- convert list name to lower case
+            data.listName = data.listName.toLowerCase();
+            clonedList = _.clone(state[data.listName]);
+
+            console.log(clonedList);
+
+            //TODO: filter out the item that matches data.itemKey
+            //clonedList = _.reject(clonedList, function(o){ return o.key === data.itemKey});
+            //console.log(clonedList);
+
+            break;
 
         default:
             return state;

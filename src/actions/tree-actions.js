@@ -29,3 +29,12 @@ export function saveListItemDetails (payload) {
         payload: payload
     }
 }
+
+export function deleteListItem (payload){
+    return {
+        type: types.DELETE_LIST_ITEM,
+        payload: payload
+    }
+}
+
+//addListItem
