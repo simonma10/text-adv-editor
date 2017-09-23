@@ -2,7 +2,6 @@ import _ from 'lodash';
 
 import * as types from '../actions/tree-action-types';
 
-//const initialState = {};
 
 const initialState = {
     config: {},
@@ -44,7 +43,7 @@ export default function treeReducer(state = initialState, action){
             break;
 
         case types.REQUEST_DATA:
-            console.log('reducer: request');
+            //console.log('reducer: request');
             return Object.assign({}, state, {
                 status: 'loading'
             });
@@ -52,8 +51,7 @@ export default function treeReducer(state = initialState, action){
 
         case types.SAVE_LIST_ITEM_DETAILS:
 
-            //TODO: handle update of key.
-            console.log('tree reducer', action.payload);
+            //console.log('tree reducer', action.payload);
             data = action.payload;
 
             //--- make strings numeric
@@ -61,19 +59,36 @@ export default function treeReducer(state = initialState, action){
                 data.newValue = _.parseInt(data.newValue);
             }
 
-            //--- key is the same or new key is empty therefore update value only
-            if(data.oldIndex === data.newIndex || data.newIndex === ''){
+            //--- if new key is empty, copy old key because we are updating the value only
+            if(data.newIndex === ''){
                 data.newIndex = data.oldIndex;
             }
 
-            //--- convert list name to lower case
+            //--- convert list name to lower case and clone the list
             data.listName = data.listName.toLowerCase();
-
             let clonedList = _.clone(state[data.listName]);
 
+            //--- Update logic: add, update key/both, update value
+            if (data.oldIndex === ''){
+                //--- if oldIndex is empty, add a new item
+                clonedList[data.newIndex] = data.newValue;
 
-            //TODO: handle new item (when oldIndex is '')
-            clonedList[data.oldIndex] = data.newValue;
+            } else if (data.oldIndex !== data.newIndex) {
+                //--- if oldIndex is different to newIndex, update item by deleting and adding new
+                delete clonedList[data.oldIndex];
+                if(data.newValue === ''){
+                    //--- if newValue is empty, copy the old value
+                    clonedList[data.newIndex] = data.oldValue;
+                } else {
+                    //--- otherwise copy both newIndex and newValue
+                    clonedList[data.newIndex] = data.newValue;
+                }
+
+
+            } else {
+                //---otherwise, update the existing item
+                clonedList[data.oldIndex] = data.newValue;
+            }
 
             return Object.assign({}, state, {
                 [data.listName]: clonedList
@@ -81,19 +96,31 @@ export default function treeReducer(state = initialState, action){
             break;
 
         case types.DELETE_LIST_ITEM:
-            console.log('tree reducer', action.payload);
+            //console.log('tree reducer', action.payload);
             data = action.payload;
 
             //--- convert list name to lower case
             data.listName = data.listName.toLowerCase();
+
+            //--- clone the list object and delete the item that matches data.itemKey
             clonedList = _.clone(state[data.listName]);
-
-            console.log(clonedList);
-
-            //TODO: filter out the item that matches data.itemKey
-            //clonedList = _.reject(clonedList, function(o){ return o.key === data.itemKey});
             //console.log(clonedList);
+            delete clonedList[data.itemKey]
 
+            return Object.assign({}, state, {
+                [data.listName]: clonedList
+            });
+
+            break;
+
+        case types.SAVE_LOCATION_DETAILS:
+            console.log('save location details');
+            return state;
+            break;
+
+        case types.DELETE_LOCATION:
+            console.log('delete location');
+            return state;
             break;
 
         default:
@@ -102,6 +129,7 @@ export default function treeReducer(state = initialState, action){
     }
 }
 
+/*
 function loadData(url){
     return fetch(url).then(response => {
         console.log(response.json);
@@ -109,4 +137,4 @@ function loadData(url){
     }).catch(error => {
         return error;
     });
-}
+}*/

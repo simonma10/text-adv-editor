@@ -36,9 +36,6 @@ class ListItemEditModal extends Component{
 
 
     save(){
-        //dispatch update action to tree reducer
-        // key, value of inputs, listName
-
         let payload = {
             listName: this.props.modal.listName,
             oldIndex: this.props.modal.itemIndex,

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import _ from 'lodash';
 
 import { setStatus } from '../actions/app-state-actions';
 import {requestData, receiveData} from "../actions/tree-actions";
@@ -9,7 +8,8 @@ import { genericFetch } from "../utils/file-loader";
 import {RECEIVE_DATA} from "../actions/tree-action-types";
 
 import CollapsiblePanel from './collapsible-panel-component';
-import { Nav, NavItem, NavDropdown, MenuItem, PageHeader } from 'react-bootstrap';
+import LocationCollapsiblePanel from './location-collapsible-panel-component';
+import { PageHeader } from 'react-bootstrap';
 
 /**
  * App container object.
@@ -34,7 +34,7 @@ class App extends Component{
 
     componentDidMount(){
         console.log('componentDidMount');
-        this.props.activateModal(true);
+        //this.props.activateModal(true);
 
     }
 
@@ -78,6 +78,11 @@ class App extends Component{
                     list={this.props.nouns}
                     listName="Nouns"
                 />
+                <LocationCollapsiblePanel
+                    list={this.props.locations}
+                    listName="Locations"
+                />
+
             </div>
         );
     }
@@ -93,7 +98,10 @@ function mapStateToProps(state){
         treeStatus: state.tree.status,
         messages: state.tree.messages,
         nouns: state.tree.nouns,
-        verbs: state.tree.verbs
+        verbs: state.tree.verbs,
+        locations: state.tree.locations,
+        items: state.tree.items,
+        conditions: state.tree.conditions
 
     }
 }
@@ -109,51 +117,3 @@ function mapDispatchToProps(dispatch){
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
-
-/*
-
-
-                <CollapsibleList
-                    listName="Config"
-                    list={this.props.config}
-                />
-                <CollapsibleList
-                    listName="Messages"
-                    list={this.props.messages}
-                />
-                <CollapsibleList
-                    listName="Nouns"
-                    list={this.props.nouns}
-                />
-                <CollapsibleList
-                    listName="Verbs"
-                    list={this.props.verbs}
-                />
-
- const NavDropdownExample = React.createClass({
- handleSelect(eventKey) {
- event.preventDefault();
- alert(`selected ${eventKey}`);
- },
-
- render() {
- return (
- <Nav bsStyle="tabs" activeKey="1" onSelect={this.handleSelect}>
- <NavItem eventKey="1" href="/home">NavItem 1 content</NavItem>
- <NavItem eventKey="2" title="Item">NavItem 2 content</NavItem>
- <NavItem eventKey="3" disabled>NavItem 3 content</NavItem>
- <NavDropdown eventKey="4" title="Dropdown" id="nav-dropdown">
- <MenuItem eventKey="4.1">Action</MenuItem>
- <MenuItem eventKey="4.2">Another action</MenuItem>
- <MenuItem eventKey="4.3">Something else here</MenuItem>
- <MenuItem divider />
- <MenuItem eventKey="4.4">Separated link</MenuItem>
- </NavDropdown>
- </Nav>
- );
- }
- });
-
-
-
- */

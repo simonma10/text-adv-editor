@@ -37,4 +37,45 @@ export function deleteListItem (payload){
     }
 }
 
-//addListItem
+export function saveLocationDetails (payload) {
+    return {
+        type: types.SAVE_LOCATION_DETAILS,
+        payload: payload
+    }
+}
+
+export function deleteLocation (payload){
+    return {
+        type: types.DELETE_LOCATION,
+        payload: payload
+    }
+}
+
+export function saveItemDetails (payload) {
+    return {
+        type: types.SAVE_ITEM_DETAILS,
+        payload: payload
+    }
+}
+
+export function deleteItem (payload){
+    return {
+        type: types.DELETE_ITEM,
+        payload: payload
+    }
+}
+
+export function saveConditionDetails (payload) {
+    return {
+        type: types.SAVE_CONDITION_DETAILS,
+        payload: payload
+    }
+}
+
+export function deleteCondition (payload){
+    return {
+        type: types.DELETE_CONDITION,
+        payload: payload
+    }
+}
+
