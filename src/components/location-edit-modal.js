@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, InputGroup, FormGroup, FormControl } from 'react-bootstrap';
+import _ from 'lodash';
 
 import { constructModal, toggleLocationModal } from '../actions/modal-actions';
 import { saveLocationDetails } from '../actions/tree-actions';
@@ -10,11 +11,11 @@ class LocationEditModal extends Component{
     constructor() {
         super();
         this.state = {
-            id:'',
-            visited:'false',
-            name:'',
-            description:'',
-            exits:{}
+            id: '',
+            visited: 'false',
+            name: '',
+            description: '',
+            exits: {}
         };
 
         this.close = this.close.bind(this);
@@ -40,8 +41,9 @@ class LocationEditModal extends Component{
     handleDescriptionChange(e){
         this.setState({description: e.target.value});
     }
-    handleExitsChange(e){
-        this.setState({exits: e.target.value});
+    handleExitsChange(direction, toLocation){
+        console.log('handleExitsChange', direction, toLocation);
+        //this.setState({exits[direction]: toLocation});
     }
 
     close() {
@@ -72,6 +74,30 @@ class LocationEditModal extends Component{
 
         this.close();
     }
+
+    renderExits() {
+        return _.map(this.props.modal.exits, (toLocation, direction, index) => {
+            //console.log(direction, toLocation, index);
+            return (
+                <InputGroup key={direction}>
+                    <InputGroup.Addon>Direction</InputGroup.Addon>
+                    <FormControl
+                        type="text"
+                        placeholder={direction}
+                        defaultValue={direction}
+                        onChange={() => this.handleExitsChange(direction, toLocation)}/>
+                    <InputGroup.Addon>To Location</InputGroup.Addon>
+                    <FormControl
+                        type="text"
+                        placeholder={toLocation}
+                        defaultValue={toLocation}
+                        onChange={() => this.handleExitsChange(direction, toLocation)}/>
+                </InputGroup>
+            );
+        })
+
+    }
+
 
     render() {
 
@@ -121,15 +147,12 @@ class LocationEditModal extends Component{
                                 value={this.state.description}
                                 onChange={this.handleDescriptionChange}
                             />
-                            <label htmlFor="exitsInput">Exits</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="exitsInput"
-                                placeholder={this.props.modal.exits}
-                                value={this.state.exits}
-                                onChange={this.handleExitsChange}
-                            />
+                            <label>Exits</label>
+                            <FormGroup>
+                                {this.renderExits()}
+                            </FormGroup>
+
+
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
