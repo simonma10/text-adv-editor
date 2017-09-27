@@ -21,26 +21,16 @@ class LocationEditModal extends Component{
         this.close = this.close.bind(this);
         this.save = this.save.bind(this);
 
-        this.handleIdChange = this.handleIdChange.bind(this);
-        this.handleVisitedChange = this.handleVisitedChange.bind(this);
-        this.handleNameChange = this.handleNameChange.bind(this);
-        this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
-        this.handleExitsChange = this.handleExitsChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);
 
     }
 
-    handleIdChange(e){
-        this.setState({id: e.target.value});
+    handleChange(e){
+        console.log(e.target.name, e.target.value);
+        this.setState({ [e.target.name]: e.target.value });
     }
-    handleVisitedChange(e){
-        this.setState({visited: e.target.value});
-    }
-    handleNameChange(e){
-        this.setState({name: e.target.value});
-    }
-    handleDescriptionChange(e){
-        this.setState({description: e.target.value});
-    }
+
+
     handleExitsChange(direction, toLocation){
         console.log('handleExitsChange', direction, toLocation);
         //this.setState({exits[direction]: toLocation});
@@ -83,12 +73,14 @@ class LocationEditModal extends Component{
                     <InputGroup.Addon>Direction</InputGroup.Addon>
                     <FormControl
                         type="text"
+                        name="direction"
                         placeholder={direction}
                         defaultValue={direction}
                         onChange={() => this.handleExitsChange(direction, toLocation)}/>
                     <InputGroup.Addon>To Location</InputGroup.Addon>
                     <FormControl
                         type="text"
+                        name="toLocation"
                         placeholder={toLocation}
                         defaultValue={toLocation}
                         onChange={() => this.handleExitsChange(direction, toLocation)}/>
@@ -115,27 +107,30 @@ class LocationEditModal extends Component{
                                  type="text"
                                  className="form-control"
                                  id="idInput"
+                                 name="id"
                                  placeholder={this.props.modal.id}
                                  value={this.state.id}
-                                 onChange={this.handleIdChange}
+                                 onChange={this.handleChange}
                             />
                             <label htmlFor="visitedInput">Visited</label>
                             <input
                                  type="text"
                                  className="form-control"
                                  id="visitedInput"
+                                 name="visited"
                                  placeholder={this.props.modal.visited}
                                  value={this.state.visited}
-                                 onChange={this.handleVisitedChange}
+                                 onChange={this.handleChange}
                              />
                             <label htmlFor="nameInput">Name</label>
                             <input
                                  type="text"
                                  className="form-control"
                                  id="nameInput"
+                                 name="name"
                                  placeholder={this.props.modal.name}
                                  value={this.state.name}
-                                 onChange={this.handleNameChange}
+                                 onChange={this.handleChange}
                             />
                             </span>
                             <label htmlFor="descriptionInput">Description</label>
@@ -143,9 +138,10 @@ class LocationEditModal extends Component{
                                 type="text"
                                 className="form-control"
                                 id="descriptionInput"
+                                name="description"
                                 placeholder={this.props.modal.description}
                                 value={this.state.description}
-                                onChange={this.handleDescriptionChange}
+                                onChange={this.handleChange}
                             />
                             <label>Exits</label>
                             <FormGroup>
@@ -183,9 +179,3 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(mapStateToProps, mapDispatchToProps)(LocationEditModal);
 
-
-/*
-
-
-
- */

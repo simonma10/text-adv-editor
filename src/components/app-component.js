@@ -9,6 +9,9 @@ import {RECEIVE_DATA} from "../actions/tree-action-types";
 
 import CollapsiblePanel from './collapsible-panel-component';
 import LocationCollapsiblePanel from './location-collapsible-panel-component';
+import ItemEditForm from './item-edit-form';
+import LocationEditForm from './location-edit-form';
+
 import { PageHeader } from 'react-bootstrap';
 
 /**
@@ -61,6 +64,8 @@ class App extends Component{
             <div>
                 <p></p>
                 {pageHeader}
+
+                <LocationEditForm/>
 
                 <CollapsiblePanel
                     list={this.props.config}
