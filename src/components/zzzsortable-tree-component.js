@@ -40,7 +40,7 @@ class Tree extends Component {
         alert('file load failure');
     }
 
-    //TODO: separate out into a reusable component, with edit feature
+
     renderConfig(){
         let renderBuffer = [];
         let index = 0;

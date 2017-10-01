@@ -114,13 +114,177 @@ export default function treeReducer(state = initialState, action){
             break;
 
         case types.SAVE_LOCATION_DETAILS:
-            console.log('save location details');
-            return state;
+            //console.log('save location details');
+            data = action.payload;
+
+            //--- make id numeric
+            if(_.isInteger(_.parseInt(data.newId))){
+                data.newId = _.parseInt(data.newId);
+            }
+
+            //TODO: check for duplicate id
+
+            //--- convert list name to lower case and clone the list
+            data.listName = data.listName.toLowerCase();
+            clonedList = _.clone(state[data.listName]);
+
+            let clonedLocation = _.find(clonedList, {'id':data.oldId});
+
+
+            if (_.isUndefined(clonedLocation)){
+                //--- if undefined, assume it's a new location
+                clonedLocation = {};
+                clonedList.push(clonedLocation);
+            }
+
+            console.log('tree-reducer::clonedLocation = ', clonedLocation);
+
+            clonedLocation.id = data.newId;
+            clonedLocation.visited = data.newVisited;
+            clonedLocation.name = data.newName;
+            clonedLocation.description = data.newDescription;
+            clonedLocation.exits = data.newExits;
+
+            return Object.assign({}, state, {
+                [data.listName]: clonedList
+            });
             break;
 
         case types.DELETE_LOCATION:
             console.log('delete location');
-            return state;
+            data = action.payload;
+
+            //--- convert list name to lower case
+            data.listName = data.listName.toLowerCase();
+
+            //--- clone the list object and find the index of the item to be deleted
+            clonedList = _.clone(state[data.listName]);
+            let index = _.findIndex(clonedList, { 'id': data.id });
+
+            //--- if index is -1, the item wasn't found.  Otherwise, remove 1 item at index
+            if (index > -1){
+                clonedList.splice(index, 1);
+            }
+
+            return Object.assign({}, state, {
+                [data.listName]: clonedList
+            });
+
+            break;
+
+
+        case types.SAVE_ITEM_DETAILS:
+            //console.log('save item details');
+            data = action.payload;
+
+            //--- make id numeric
+            if(_.isInteger(_.parseInt(data.newId))){
+                data.newId = _.parseInt(data.newId);
+            }
+
+            //TODO: check for duplicate id
+
+            //--- convert list name to lower case and clone the list
+            data.listName = data.listName.toLowerCase();
+            clonedList = _.clone(state[data.listName]);
+
+            let clonedItem = _.find(clonedList, {'id':data.oldId});
+
+
+            if (_.isUndefined(clonedItem)){
+                //--- if undefined, assume it's a new item
+                clonedItem = {};
+                clonedList.push(clonedItem);
+            }
+
+            console.log('tree-reducer::clonedItem = ', clonedItem);
+
+            clonedItem.id = data.newId;
+            clonedItem.location = data.newLocation;
+            clonedItem.name = data.newName;
+            clonedItem.description = data.newDescription;
+            clonedItem.shortdescription = data.newShortdescription;
+
+            return Object.assign({}, state, {
+                [data.listName]: clonedList
+            });
+            break;
+
+        case types.DELETE_ITEM:
+            console.log('delete item');
+            data = action.payload;
+
+            //--- convert list name to lower case
+            data.listName = data.listName.toLowerCase();
+
+            //--- clone the list object and find the index of the item to be deleted
+            clonedList = _.clone(state[data.listName]);
+            index = _.findIndex(clonedList, { 'id': data.id });
+
+            //--- if index is -1, the item wasn't found.  Otherwise, remove 1 item at index
+            if (index > -1){
+                clonedList.splice(index, 1);
+            }
+
+            return Object.assign({}, state, {
+                [data.listName]: clonedList
+            });
+
+            break;
+
+        case types.SAVE_CONDITION_DETAILS:
+            data = action.payload;
+            //--- make id numeric
+            if(_.isInteger(_.parseInt(data.newId))){
+                data.newId = _.parseInt(data.newId);
+            }
+
+            //TODO: check for duplicate id
+
+            //--- convert list name to lower case and clone the list
+            data.listName = data.listName.toLowerCase();
+            clonedList = _.clone(state[data.listName]);
+
+            let clonedCondition = _.find(clonedList, {'id':data.oldId});
+
+
+            if (_.isUndefined(clonedCondition)){
+                //--- if undefined, assume it's a new item
+                clonedCondition = {};
+                clonedList.push(clonedCondition);
+            }
+
+            console.log('tree-reducer::clonedCondition = ', clonedCondition);
+
+            clonedCondition.id = data.newId;
+            clonedCondition.tests = data.newTests;
+            clonedCondition.actions = data.newActions;
+
+            return Object.assign({}, state, {
+                [data.listName]: clonedList
+            });
+            break;
+
+        case types.DELETE_CONDITION:
+            console.log('delete Condition');
+            data = action.payload;
+
+            //--- convert list name to lower case
+            data.listName = data.listName.toLowerCase();
+
+            //--- clone the list object and find the index of the item to be deleted
+            clonedList = _.clone(state[data.listName]);
+            index = _.findIndex(clonedList, { 'id': data.id });
+
+            //--- if index is -1, the item wasn't found.  Otherwise, remove 1 item at index
+            if (index > -1){
+                clonedList.splice(index, 1);
+            }
+
+            return Object.assign({}, state, {
+                [data.listName]: clonedList
+            });
+
             break;
 
         default:
@@ -129,12 +293,3 @@ export default function treeReducer(state = initialState, action){
     }
 }
 
-/*
-function loadData(url){
-    return fetch(url).then(response => {
-        console.log(response.json);
-        return response.json();
-    }).catch(error => {
-        return error;
-    });
-}*/

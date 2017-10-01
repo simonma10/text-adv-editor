@@ -9,8 +9,11 @@ import {RECEIVE_DATA} from "../actions/tree-action-types";
 
 import CollapsiblePanel from './collapsible-panel-component';
 import LocationCollapsiblePanel from './location-collapsible-panel-component';
-import ItemEditForm from './item-edit-form';
-import LocationEditForm from './location-edit-form';
+import ItemCollapsiblePanel from './item-collapsible-panel-component';
+import ConditionCollapsiblePanel from './condition-collapsible-panel-component';
+
+//import ItemEditForm from './item-edit-form';
+//import LocationEditForm from './location-edit-form';
 
 import { PageHeader } from 'react-bootstrap';
 
@@ -21,7 +24,6 @@ import { PageHeader } from 'react-bootstrap';
 class App extends Component{
     constructor(props){
         super(props);
-
     }
 
     componentWillMount(){
@@ -62,10 +64,9 @@ class App extends Component{
 
         return(
             <div>
+
                 <p></p>
                 {pageHeader}
-
-                <LocationEditForm/>
 
                 <CollapsiblePanel
                     list={this.props.config}
@@ -86,6 +87,15 @@ class App extends Component{
                 <LocationCollapsiblePanel
                     list={this.props.locations}
                     listName="Locations"
+                />
+                <ItemCollapsiblePanel
+                    list={this.props.items}
+                    listName="Items"
+                />
+
+                <ConditionCollapsiblePanel
+                    list={this.props.conditions}
+                    listName="Conditions"
                 />
 
             </div>

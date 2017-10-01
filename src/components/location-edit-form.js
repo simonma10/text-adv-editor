@@ -4,31 +4,27 @@ import { connect } from 'react-redux';
 import { Button, Col, ControlLabel, Form, FormGroup, FormControl } from 'react-bootstrap';
 import _ from 'lodash';
 
-import { toggleLocationModal } from '../actions/modal-actions';
+import { toggleGenericModal } from '../actions/modal-actions';
 import { saveLocationDetails } from '../actions/tree-actions';
 
 class LocationEditForm extends Component{
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            id: '',
-            visited: '',
-            name: '',
-            description: '',
-            exits: {
-                "west":1,
-                "north":3
-            }
+            id: this.props.modal.id,
+            visited: this.props.modal.visited,
+            name: this.props.modal.name,
+            description: this.props.modal.description,
+            exits: JSON.stringify(this.props.modal.exits)
         };
 
-        /*this.close = this.close.bind(this);
-        this.save = this.save.bind(this);*/
+        this.close = this.close.bind(this);
+        this.save = this.save.bind(this);
 
         this.handleChange = this.handleChange.bind(this);
     }
 
     handleChange(e){
-        console.log(e.target.name, e.target.value);
         this.setState({ [e.target.name]: e.target.value });
     }
 
@@ -48,28 +44,42 @@ class LocationEditForm extends Component{
         }
     }
 
-
-/*
+    getValidationJson(value){
+        if(JSON.parse(value)){
+            return 'success';
+        } else {
+            return 'error';
+        }
+    }
 
     close() {
-        //this.props.toggleLocationModal();
+        this.props.toggleGenericModal();
     }
 
     save(){
+        //TODO: ensure validation logic = OK before saving
+        let exitsParse = JSON.parse(this.state.exits);
         let payload = {
+            listName: this.props.modal.listName,
+            list: this.props.modal.list,
+
             oldId: this.props.modal.id,
             newId: this.state.id,
+
             oldVisited: this.props.modal.visited,
             newVisited: this.state.visited,
+
             oldName: this.props.modal.name,
             newName: this.state.name,
+
             oldDescription: this.props.modal.description,
             newDescription: this.state.description,
+
             oldExits: this.props.modal.exits,
-            newExits: this.state.exits,
+            newExits: exitsParse,
         };
         console.log('save', payload);
-        this.props.saveItemDetails(payload);
+        this.props.saveLocationDetails(payload);
 
         this.state.id = '';
         this.state.visited = 'false';
@@ -79,34 +89,50 @@ class LocationEditForm extends Component{
 
         this.close();
     }
-*/
 
-    renderExits(){
-        return _.map(this.state.exits, (toLocation, direction) => {
-            return (
-                <Form inline key={direction}>
+
+    renderExitRow(direction, toLocation, index = direction){
+        return (
+            <div key={index}>
+                <Col sm={2}>
+                    <ControlLabel>Direct'n</ControlLabel>
+                </Col>
+                <Col sm={4}>
                     <FormGroup>
-                        <ControlLabel>Direction</ControlLabel>
-                        {' '}
                         <FormControl
                             type="text"
                             name="direction"
                             placeholder="direction"
                             value={direction}
+                            onChange={this.handleChange}
 
                         />
                     </FormGroup>
+                </Col>
+                <Col sm={2}>
+                    <ControlLabel>To Loc</ControlLabel>
+                </Col>
+
+                <Col sm={4}>
                     <FormGroup>
-                        <ControlLabel>To</ControlLabel>
-                        {' '}
                         <FormControl
                             type="text"
                             name="toLocation"
                             placeholder="toLocation"
-                            value={toLocation}
+                            value={this.state.exits[direction]}
+                            onChange={this.handleChange}
                         />
                     </FormGroup>
-                </Form>
+                </Col>
+            </div>
+        )
+    }
+
+
+    renderExits(){
+        return _.map(this.state.exits, (toLocation, direction) => {
+            return (
+                this.renderExitRow(direction, toLocation)
             );
         })
 
@@ -115,6 +141,7 @@ class LocationEditForm extends Component{
 
 
     render() {
+        //TODO: render exits nicely, in an actual form component
         return (
             <Form horizontal>
                 <FormGroup
@@ -166,23 +193,37 @@ class LocationEditForm extends Component{
                     </Col>
                     <Col sm={10}>
                         <FormControl
-                            type="text"
+                            componentClass="textarea"
                             name="description"
                             value={this.state.description}
                             placeholder="description"
                             onChange={this.handleChange} />
                     </Col>
                 </FormGroup>
-                <FormGroup
-
-                >
+                <FormGroup>
                     <Col componentClass={ControlLabel} sm={2}>
                         Exits
                     </Col>
                     <Col sm={10}>
-                        {this.renderExits()}
+                        <FormControl
+                            componentClass="textarea"
+                            placeholder="exits"
+                            name="exits"
+
+                            value={this.state.exits}
+                            onChange={this.handleChange}
+                        />
                     </Col>
                 </FormGroup>
+                <hr/>
+                <FormGroup>
+                    <Col smOffset={2} sm={10}>
+                        <Button onClick={this.save} className="btn btn-primary">Save Changes</Button>
+                        {'  '}
+                        <Button onClick={this.close}>Cancel</Button>
+                    </Col>
+                </FormGroup>
+
             </Form>
         );
     }
@@ -191,16 +232,25 @@ class LocationEditForm extends Component{
 
 function mapStateToProps(state) {
     return {
-        //modal: state.modal
+        modal: state.modal
     };
 }
 
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-
+        saveLocationDetails,
+        toggleGenericModal
     }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LocationEditForm);
 
+/*
+ {this.renderExits()}
+ {this.renderExitRow('new', 0)}
+
+ validationState={this.getValidationJson(this.state.exits)}
+
+
+ */

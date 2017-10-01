@@ -5,17 +5,15 @@ import { Button, Col, ControlLabel, Form, FormGroup, FormControl } from 'react-b
 import _ from 'lodash';
 
 import { toggleGenericModal } from '../actions/modal-actions';
-import { saveItemDetails } from '../actions/tree-actions';
+import { saveConditionDetails } from '../actions/tree-actions';
 
-class ItemEditForm extends Component{
+class ConditionEditForm extends Component{
     constructor(props) {
         super(props);
         this.state = {
             id: this.props.modal.id,
-            location: this.props.modal.location,
-            name: this.props.modal.name,
-            shortdescription: this.props.modal.shortdescription,
-            description: this.props.modal.description
+            tests: JSON.stringify(this.props.modal.tests,null,2),
+            actions: JSON.stringify(this.props.modal.actions, null, 2)
         };
 
         this.close = this.close.bind(this);
@@ -36,11 +34,30 @@ class ItemEditForm extends Component{
         }
     }
 
+    getValidationBoolean(value){
+        if (value === '' || value ==='true' || value === 'false'){
+            return 'success';
+        } else {
+            return 'error';
+        }
+    }
+
+    getValidationJson(value){
+        if(JSON.parse(value)){
+            return 'success';
+        } else {
+            return 'error';
+        }
+    }
+
     close() {
         this.props.toggleGenericModal();
     }
 
     save(){
+        //TODO: ensure validation logic = OK before saving
+        let testsParse = JSON.parse(this.state.tests);
+        let actionsParse = JSON.parse(this.state.actions);
         let payload = {
             listName: this.props.modal.listName,
             list: this.props.modal.list,
@@ -48,26 +65,19 @@ class ItemEditForm extends Component{
             oldId: this.props.modal.id,
             newId: this.state.id,
 
-            oldLocation: this.props.modal.location,
-            newLocation: this.state.location,
+            oldTests: this.props.modal.tests,
+            newTests: testsParse,
 
-            oldName: this.props.modal.name,
-            newName: this.state.name,
-
-            oldDescription: this.props.modal.description,
-            newDescription: this.state.description,
-
-            oldShortdescription: this.props.modal.shortdescription,
-            newShortdescription: this.state.shortdescription,
+            oldActions: this.props.modal.actions,
+            newActions: actionsParse,
         };
-        //console.log('save', payload);
-        this.props.saveItemDetails(payload);
+        console.log('save', payload);
+        this.props.saveConditionDetails(payload);
 
         this.state.id = '';
-        this.state.name = '';
-        this.state.location = '';
-        this.state.description = '';
-        this.state.shortdescription='';
+
+        this.state.tests={};
+        this.state.actions={};
 
         this.close();
     }
@@ -75,6 +85,7 @@ class ItemEditForm extends Component{
 
 
     render() {
+        //TODO: render tests and actions nicely, in an actual form component
         return (
             <Form horizontal>
                 <FormGroup
@@ -92,58 +103,37 @@ class ItemEditForm extends Component{
                             onChange={this.handleChange} />
                     </Col>
                 </FormGroup>
-                <FormGroup
-                    validationState={this.getValidationIsNumeric(this.state.location)}
-                >
+
+                <FormGroup>
                     <Col componentClass={ControlLabel} sm={2}>
-                        Location
+                        Tests
                     </Col>
                     <Col sm={10}>
                         <FormControl
-                            type="text"
-                            name="location"
-                            value={this.state.location}
-                            placeholder="location (must be an integer)"
-                            onChange={this.handleChange} />
+                            componentClass="textarea"
+                            placeholder="tests"
+                            name="tests"
+                            rows="8"
+
+                            value={this.state.tests}
+                            onChange={this.handleChange}
+                        />
                     </Col>
                 </FormGroup>
                 <FormGroup>
                     <Col componentClass={ControlLabel} sm={2}>
-                        Name
+                        Actions
                     </Col>
                     <Col sm={10}>
                         <FormControl
-                            type="text"
-                            name="name"
-                            value={this.state.name}
-                            placeholder="name (e.g. key, parrot)"
-                            onChange={this.handleChange} />
-                    </Col>
-                </FormGroup>
-                <FormGroup>
-                    <Col componentClass={ControlLabel} sm={2}>
-                        Shortdesc
-                    </Col>
-                    <Col sm={10}>
-                        <FormControl
-                            type="text"
-                            name="shortdescription"
-                            value={this.state.shortdescription}
-                            placeholder="short description for inventory (e.g 'an ornate key')"
-                            onChange={this.handleChange} />
-                    </Col>
-                </FormGroup>
-                <FormGroup>
-                    <Col componentClass={ControlLabel} sm={2}>
-                        Description
-                    </Col>
-                    <Col sm={10}>
-                        <FormControl
-                            type="text"
-                            name="description"
-                            value={this.state.description}
-                            placeholder="description for 'examine' (e.g. 'this key looks useful')"
-                            onChange={this.handleChange} />
+                            componentClass="textarea"
+                            placeholder="actions"
+                            name="actions"
+                            rows="8"
+
+                            value={this.state.actions}
+                            onChange={this.handleChange}
+                        />
                     </Col>
                 </FormGroup>
                 <hr/>
@@ -154,7 +144,6 @@ class ItemEditForm extends Component{
                         <Button onClick={this.close}>Cancel</Button>
                     </Col>
                 </FormGroup>
-
             </Form>
         );
     }
@@ -170,10 +159,10 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        saveItemDetails,
+        saveConditionDetails,
         toggleGenericModal
     }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ItemEditForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ConditionEditForm);
 
