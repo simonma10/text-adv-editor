@@ -8,6 +8,7 @@ import { constructModal, toggleGenericModal } from '../actions/modal-actions';
 import LocationEditForm from './location-edit-form';
 import ItemEditForm from './item-edit-form';
 import ConditionEditForm from './condition-edit-form';
+import DataDumpForm from './data-dump-form';
 
 
 class GenericEditModal extends Component{
@@ -71,7 +72,7 @@ class GenericEditModal extends Component{
 
 
     getForm(){
-        console.log('listName is ', this.props.modal.listName);
+        //console.log('listName is ', this.props.modal.listName);
         switch(this.props.modal.listName){
             case 'Locations':
                 return(
@@ -91,6 +92,11 @@ class GenericEditModal extends Component{
                 );
                 break;
 
+            case 'Dump':
+                return(
+                    <DataDumpForm/>
+                );
+                break;
 
             default:
                 return(

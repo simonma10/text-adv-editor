@@ -8,6 +8,7 @@
   "license": "ISC",
   "scripts": {
     "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+    "build": "webpack",
     "test": "jest"
   },
   "babel": {
@@ -27,13 +28,14 @@
     "webpack-dev-server": "^2.8.2"
   },
   "dependencies": {
+    "express": "^4.16.1",
     "lodash": "^4.17.4",
     "react": "^15.6.1",
+    "react-bootstrap": "^0.31.3",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-sortable-tree": "^1.2.2",
-    "react-bootstrap": "^0.31.3",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0"
   }

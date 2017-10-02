@@ -12,10 +12,12 @@ import LocationCollapsiblePanel from './location-collapsible-panel-component';
 import ItemCollapsiblePanel from './item-collapsible-panel-component';
 import ConditionCollapsiblePanel from './condition-collapsible-panel-component';
 
-//import ItemEditForm from './item-edit-form';
-//import LocationEditForm from './location-edit-form';
+import GenericEditModal from './generic-edit-modal';
+import { constructModal, toggleGenericModal } from '../actions/modal-actions';
+import { deleteItem } from '../actions/tree-actions';
 
-import { PageHeader } from 'react-bootstrap';
+
+import { PageHeader, Button } from 'react-bootstrap';
 
 /**
  * App container object.
@@ -24,42 +26,65 @@ import { PageHeader } from 'react-bootstrap';
 class App extends Component{
     constructor(props){
         super(props);
+
+        this.handleSaveClick = this.handleSaveClick.bind(this);
     }
 
     componentWillMount(){
-        console.log('componentWilLMount');
         this.props.genericFetch({
             method: 'GET',
-            dataUrl: '/data/globals.json',
+            dataUrl: '/data',
             dataAcquiredType: RECEIVE_DATA,
             successCallBack: this.getSuccess,
             failCallBack: this.getFail
         });
-    }
 
-    componentDidMount(){
-        console.log('componentDidMount');
-        //this.props.activateModal(true);
 
     }
 
-    getSuccess() {
-        console.log('success');
+    getSuccess(payload) {
+        console.log('genericFetch success', payload);
     }
 
-    getFail() {
-        console.log('File read failure');
-        alert('file load failure');
+    getFail(error) {
+        console.log('genericFetch failure', error);
+        alert('file I/O failure');
+    }
+
+    handleSaveClick(){
+
+        let data = '{ "config":' + JSON.stringify(this.props.config, null, 2) +
+            ', "messages": ' + JSON.stringify(this.props.messages, null, 2) +
+            ', "verbs": ' + JSON.stringify(this.props.verbs, null, 2) +
+            ', "nouns": ' + JSON.stringify(this.props.nouns, null, 2) +
+            ', "locations": ' + JSON.stringify(this.props.locations, null, 2) +
+            ', "items": ' + JSON.stringify(this.props.items, null, 2) +
+            ', "conditions": ' + JSON.stringify(this.props.conditions, null, 2) +
+        '}';
+        let payload = {
+            listName: 'Dump',
+            showGenericModal: false,
+            description: data
+        };
+        this.props.constructModal(payload);
+        this.props.toggleGenericModal();
+
+      /*  this.props.genericFetch({
+            method: 'POST',
+            dataUrl: '/data',
+            data: payload,
+            successCallBack: this.getSuccess,
+            failCallBack: this.getFail
+        });*/
     }
 
     componentDidMount(){
         this.props.setStatus("ready");
-
     }
 
     render(){
         const pageHeader = (
-            <PageHeader>JSON Editor <small>app:{this.props.appStatus} / file:{this.props.treeStatus}</small></PageHeader>
+            <PageHeader>JSON Editor <small>app:{this.props.appStatus} / file:{this.props.treeStatus} <Button onClick={this.handleSaveClick}>Save</Button></small></PageHeader>
         );
 
         return(
@@ -127,6 +152,8 @@ function mapDispatchToProps(dispatch){
         requestData,
         receiveData,
         genericFetch,
+        constructModal,
+        toggleGenericModal
     }, dispatch)
 
 }
