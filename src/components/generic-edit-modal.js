@@ -9,6 +9,7 @@ import LocationEditForm from './location-edit-form';
 import ItemEditForm from './item-edit-form';
 import ConditionEditForm from './condition-edit-form';
 import DataDumpForm from './data-dump-form';
+import ListItemEditForm from './list-item-edit-form';
 
 
 class GenericEditModal extends Component{
@@ -59,7 +60,7 @@ class GenericEditModal extends Component{
             newExits: this.state.exits,
         };
         console.log('save', payload);
-        this.props.saveLocationDetails(payload);
+        //this.props.saveLocationDetails(payload);
 
         this.state.id = '';
         this.state.visited = 'false';
@@ -95,6 +96,15 @@ class GenericEditModal extends Component{
             case 'Dump':
                 return(
                     <DataDumpForm/>
+                );
+                break;
+
+            case 'Config':
+            case 'Messages':
+            case 'Verbs':
+            case 'Nouns':
+                return(
+                    <ListItemEditForm/>
                 );
                 break;
 

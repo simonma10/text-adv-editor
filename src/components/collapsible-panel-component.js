@@ -5,8 +5,12 @@ import { Panel, Table, Glyphicon } from 'react-bootstrap';
 import _ from 'lodash';
 
 import ListItemEditModal from './list-item-edit-modal';
-import { constructModal, toggleModal } from '../actions/modal-actions';
+//import { constructModal, toggleModal } from '../actions/modal-actions';
 import { deleteListItem } from '../actions/tree-actions';
+import GenericEditModal from './generic-edit-modal';
+import { constructModal, toggleGenericModal } from '../actions/modal-actions';
+
+
 
 class CollapsiblePanel extends Component{
     constructor(props) {
@@ -23,12 +27,12 @@ class CollapsiblePanel extends Component{
         let payload = {
             listName: this.props.listName,
             list: this.props.list,
-            showModal: false,
+            showGenericModal: false,
             itemIndex: index,
             itemValue: value
         };
         this.props.constructModal(payload);
-        this.props.toggleModal();
+        this.props.toggleGenericModal();
     }
 
     delete(index){
@@ -45,12 +49,12 @@ class CollapsiblePanel extends Component{
         let payload = {
             listName: this.props.listName,
             list: this.props.list,
-            showModal: false,
+            showGenericModal: false,
             itemIndex: '',
             itemValue: ''
         };
         this.props.constructModal(payload);
-        this.props.toggleModal();
+        this.props.toggleGenericModal();
     }
 
     renderList(){
@@ -102,7 +106,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         constructModal,
-        toggleModal,
+        toggleGenericModal,
         deleteListItem,
     }, dispatch);
 }

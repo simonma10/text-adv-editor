@@ -1,34 +1,30 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, Col, ControlLabel, Form, FormGroup, FormControl } from 'react-bootstrap';
 
 import { constructModal, toggleModal } from '../actions/modal-actions';
 import { saveListItemDetails } from '../actions/tree-actions';
 
 class ListItemEditModal extends Component{
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            keyNameInput:'',
-            valueNameInput: ''
+            keyNameInput: this.props.modal.itemIndex,
+            valueNameInput: this.props.modal.itemValue
         }
 
         this.close = this.close.bind(this);
         this.save = this.save.bind(this);
-        this.handleKeyChange = this.handleKeyChange.bind(this);
-        this.handleValueChange = this.handleValueChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+
     }
 
-    handleKeyChange(e){
+    handleChange(e){
         //console.log(e)
-        this.setState({keyNameInput: e.target.value});
+        this.setState({ [e.target.name]: e.target.value});
     }
 
-    handleValueChange(e){
-        //console.log(e);
-        this.setState({valueNameInput: e.target.value});
-    }
 
     close() {
         this.props.toggleModal();
@@ -61,26 +57,37 @@ class ListItemEditModal extends Component{
                         <Modal.Title>{this.props.modal.mode} {this.props.modal.listName}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <div className="form-group">
-                            <label htmlFor="keyNameInput">Key</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="keyNameInput"
-                                placeholder={this.props.modal.itemIndex}
-                                value={this.state.keyNameInput}
-                                onChange={this.handleKeyChange}
-                            />
-                            <label htmlFor="valueInput">Value</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="valueInput"
-                                placeholder={this.props.modal.itemValue}
-                                value={this.state.valueNameInput}
-                                onChange={this.handleValueChange}
-                            />
-                        </div>
+
+                        <Form horizontal>
+                            <FormGroup>
+                                <Col componentClass={ControlLabel} sm={2}>
+                                    Key
+                                </Col>
+                                <Col sm={10}>
+                                    <FormControl
+                                        type="text"
+                                        name="keyNameInput"
+                                        value={this.state.keyNameInput}
+
+                                        onChange={this.handleChange} />
+                                </Col>
+                            </FormGroup>
+                            <FormGroup>
+                                <Col componentClass={ControlLabel} sm={2}>
+                                    Value
+                                </Col>
+                                <Col sm={10}>
+                                    <FormControl
+                                        type="text"
+                                        name="valueNameInput"
+                                        value={this.state.valueNameInput}
+
+                                        onChange={this.handleChange} />
+                                </Col>
+                            </FormGroup>
+
+                        </Form>
+
                     </Modal.Body>
                     <Modal.Footer>
                         <Button onClick={this.save} className="btn btn-primary">Save changes</Button>
@@ -109,3 +116,29 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListItemEditModal);
+
+
+/*
+ <div className="form-group">
+ <label htmlFor="keyNameInput">Key</label>
+ <input
+ type="text"
+ className="form-control"
+ id="keyNameInput"
+ value={this.state.keyNameInput}
+ placeholder='key'
+ onChange={this.handleKeyChange}
+ />
+ <label htmlFor="valueInput">Value</label>
+ <input
+ type="text"
+ className="form-control"
+ id="valueInput"
+ value={this.state.valueNameInput}
+ placeholder="value"
+ onChange={this.handleValueChange}
+ />
+ </div>
+
+
+ */

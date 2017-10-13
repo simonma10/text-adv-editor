@@ -6,6 +6,7 @@ import { setStatus } from '../actions/app-state-actions';
 import {requestData, receiveData} from "../actions/tree-actions";
 import { genericFetch } from "../utils/file-loader";
 import {RECEIVE_DATA} from "../actions/tree-action-types";
+import axios from 'axios';
 
 import CollapsiblePanel from './collapsible-panel-component';
 import LocationCollapsiblePanel from './location-collapsible-panel-component';
@@ -28,6 +29,7 @@ class App extends Component{
         super(props);
 
         this.handleSaveClick = this.handleSaveClick.bind(this);
+        this.handleDumpClick = this.handleDumpClick.bind(this);
     }
 
     componentWillMount(){
@@ -52,31 +54,51 @@ class App extends Component{
     }
 
     handleSaveClick(){
-
-        let data = '{ "config":' + JSON.stringify(this.props.config, null, 2) +
-            ', "messages": ' + JSON.stringify(this.props.messages, null, 2) +
-            ', "verbs": ' + JSON.stringify(this.props.verbs, null, 2) +
-            ', "nouns": ' + JSON.stringify(this.props.nouns, null, 2) +
-            ', "locations": ' + JSON.stringify(this.props.locations, null, 2) +
-            ', "items": ' + JSON.stringify(this.props.items, null, 2) +
-            ', "conditions": ' + JSON.stringify(this.props.conditions, null, 2) +
-        '}';
-        let payload = {
-            listName: 'Dump',
-            showGenericModal: false,
-            description: data
+        let saveData = {
+            "config": this.props.config,
+            "messages": this.props.messages,
+            "verbs": this.props.verbs,
+            "nouns": this.props.nouns,
+            "locations": this.props.locations,
+            "items": this.props.items,
+            "conditions": this.props.conditions
         };
-        this.props.constructModal(payload);
-        this.props.toggleGenericModal();
 
-      /*  this.props.genericFetch({
-            method: 'POST',
-            dataUrl: '/data',
-            data: payload,
-            successCallBack: this.getSuccess,
-            failCallBack: this.getFail
-        });*/
+        console.log('saving...', saveData);
+
+        axios.post('/data', saveData)
+            .then(function (response){
+                console.log(response);
+                //dispatch({ type: actionType, payload: response});
+                //return response;
+            })
+            .catch(function (error){
+                console.log(error);
+                //dispatch({ type: 'ERROR', payload: error});
+                //return error;
+            });
+
     }
+
+    handleDumpClick(){
+          let data = '{ "config":' + JSON.stringify(this.props.config, null, 2) +
+         ', "messages": ' + JSON.stringify(this.props.messages, null, 2) +
+         ', "verbs": ' + JSON.stringify(this.props.verbs, null, 2) +
+         ', "nouns": ' + JSON.stringify(this.props.nouns, null, 2) +
+         ', "locations": ' + JSON.stringify(this.props.locations, null, 2) +
+         ', "items": ' + JSON.stringify(this.props.items, null, 2) +
+         ', "conditions": ' + JSON.stringify(this.props.conditions, null, 2) +
+         '}';
+
+         let payload = {
+         listName: 'Dump',
+         showGenericModal: false,
+         description: data
+         };
+         this.props.constructModal(payload);
+         this.props.toggleGenericModal();
+    }
+
 
     componentDidMount(){
         this.props.setStatus("ready");
@@ -84,7 +106,10 @@ class App extends Component{
 
     render(){
         const pageHeader = (
-            <PageHeader>JSON Editor <small>app:{this.props.appStatus} / file:{this.props.treeStatus} <Button onClick={this.handleSaveClick}>Save</Button></small></PageHeader>
+            <PageHeader>JSON Editor <small>app:{this.props.appStatus} / file:{this.props.treeStatus}
+                {'  '}<Button onClick={this.handleSaveClick}>Save</Button>
+                {'  '}<Button onClick={this.handleDumpClick}>Dump</Button>
+            </small></PageHeader>
         );
 
         return(
@@ -159,3 +184,5 @@ function mapDispatchToProps(dispatch){
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
+
+

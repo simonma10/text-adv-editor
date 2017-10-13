@@ -1,27 +1,10 @@
 const express = require('express')
 const fs = require('fs')
+const bodyParser = require('body-parser');
 const app = express()
 const PORT = 3000;
 
-
-
-
-/*
-
-var fileReader = function (req, res, next){
-    let data = fs.readFileSync('./public/data/globals.json');
-    let json = JSON.parse(data);
-    console.log(json);
-    res.send('fileReader');
-    next();
-};
-*/
-
-
-var fileList = function (req, res, next){
-    res.send('fileList');
-    next();
-};
+app.use(bodyParser.json());
 
 app.route('/data')
     .get(function (req, res){
@@ -33,25 +16,29 @@ app.route('/data')
 
     .post(function (req, res){
         console.log('post /data');
-        //console.log(req);
-        return res.status(200).send('thanks for that');
+        console.log(req.body.config);
+        console.log(req.body.messages);
+        console.log(req.body.locations);
+
+
+        let saveData={
+            config: req.body.config,
+            messages: req.body.messages,
+            verbs: req.body.verbs,
+            nouns: req.body.nouns,
+            locations: req.body.locations,
+            items: req.body.items,
+            conditions: req.body.conditions
+        }
+
+        fs.writeFile('./public/data/jungle-adv-v01.json', JSON.stringify(saveData, null, 2), (err) => {
+            if(err) {
+                console.log(err);
+            }
+            console.log('post successful');
+            return res.status(200).send('thanks for that - file saved');
+        });
     })
-
-    .put(function (req, res){
-
-
-    })
-
-/*
-
-app.get('/data', function(req, res){
-    console.log('/data');
-    let data = fs.readFileSync('./public/data/globals.json');
-    let json = JSON.parse(data);
-    return res.send(json);
-});
-
-*/
 
 
 app.use(express.static('public'))
@@ -61,12 +48,3 @@ app.listen(PORT, function () {
 })
 
 
-
-
-/*
- fs.readFile('./public/data/globals.json', (err, data) => {
- if (err) throw err;
- let json = JSON.parse(data);
- console.log(json);
- });
- */

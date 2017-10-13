@@ -51,7 +51,7 @@ export default function treeReducer(state = initialState, action){
 
         case types.SAVE_LIST_ITEM_DETAILS:
 
-            //console.log('tree reducer', action.payload);
+            console.log('tree reducer::save list item details', action.payload);
             data = action.payload;
 
             //--- make strings numeric
